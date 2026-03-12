@@ -1,10 +1,10 @@
 # spacelogic-frontend-engineer-test
 
-SHOP.CO–style landing and product detail page for the frontend test. Uses [Fake Store API](https://fakestoreapi.com/) for data and the provided Figma for layout.
+My take on the SHOP.CO frontend test — landing page + product detail. Data from [Fake Store API](https://fakestoreapi.com/), layout from the Figma they gave us.
 
 Live: https://robshandell-spacelogic-frontend-eng.vercel.app/
 
-Tech: Next.js 14 (App Router), React, TypeScript, Tailwind.
+Next.js 14 (App Router), React, TypeScript, Tailwind.
 
 ---
 
@@ -21,7 +21,7 @@ Tech: Next.js 14 (App Router), React, TypeScript, Tailwind.
    npm install
    npm run dev
    ```
-   Then open http://localhost:3000 in your browser.
+   App runs at http://localhost:3000.
 
 3. Production build (optional):
    ```bash
@@ -31,6 +31,6 @@ Tech: Next.js 14 (App Router), React, TypeScript, Tailwind.
 
 ---
 
-Home page has hero, New Arrivals / Top Selling carousels, browse-by-style section, testimonials, newsletter, and footer. Product page has single product with image, details, size/colour/quantity, tabs (Details, Reviews, FAQs), and “You might also like”. Responsive: one column on mobile, 2–3 on desktop.
+Home has the hero, New Arrivals + Top Selling carousels, browse by dress style, testimonials, newsletter bit, footer. Product page is the single product (image, details, size/colour/quantity, tabs for Details / Reviews / FAQs) plus “You might also like”. Layout is responsive — 1 col on mobile, 2–3 on desktop.
 
-Figma: [Frontend test ToolKit](https://www.figma.com/design/JtBnVn0Rsi2DELoUkkbyHj/Frontend-test-ToolKit?node-id=0-1&t=DwjIyD93hWrKKlqF-1)
+Design ref: [Figma – Frontend test ToolKit](https://www.figma.com/design/JtBnVn0Rsi2DELoUkkbyHj/Frontend-test-ToolKit?node-id=0-1&t=DwjIyD93hWrKKlqF-1)
