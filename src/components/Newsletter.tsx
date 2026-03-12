@@ -47,7 +47,7 @@ export function Newsletter() {
                 />
               </div>
               <p id="newsletter-desc" className="sr-only">
-                We'll send you updates on new products and offers.
+                We&apos;ll send you updates on new products and offers.
               </p>
               <button
                 type="submit"
