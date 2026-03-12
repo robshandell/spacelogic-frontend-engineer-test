@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SHOP.CO – Frontend test
 
-## Getting Started
+E-commerce style landing + product detail page. Data comes from [Fake Store API](https://fakestoreapi.com/); layout and UI are based on the provided Figma (SHOP.CO).
 
-First, run the development server:
+**Stack:** Next.js 14 (App Router), React, TypeScript, Tailwind.
+
+## What’s in it
+
+- **Home:** Hero, New Arrivals + Top Selling carousels (from API), Browse by dress style, testimonials, newsletter strip, footer.
+- **Product page:** Single product (image, title, description, price, rating), breadcrumb, size/color/quantity, tabs (Details, Rating & Reviews, FAQs), “You might also like” grid.
+
+Responsive layout: one column on small screens, 2–3 columns on desktop. Header uses a hamburger on mobile and full nav + search on larger screens.
+
+## Run it
 
 ```bash
+git clone https://github.com/robshandell/spacelogic-frontend-engineer-test.git
+cd spacelogic-frontend-engineer-test
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open **http://localhost:3000**.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Production build:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+## Repo layout
 
-To learn more about Next.js, take a look at the following resources:
+- `src/app/` – Routes (home, `products/[id]`)
+- `src/components/` – Header, Footer, Hero, ProductCard, carousels, etc.
+- `src/lib/api.ts` – Fetch helpers for Fake Store API
+- `src/types/product.ts` – Product types
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Design reference: [Figma – Frontend test ToolKit](https://www.figma.com/design/JtBnVn0Rsi2DELoUkkbyHj/Frontend-test-ToolKit?node-id=0-1&t=DwjIyD93hWrKKlqF-1)
