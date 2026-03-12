@@ -1,39 +1,36 @@
-# SHOP.CO – Frontend test
+# spacelogic-frontend-engineer-test
 
-E-commerce style landing + product detail page. Data comes from [Fake Store API](https://fakestoreapi.com/); layout and UI are based on the provided Figma (SHOP.CO).
+SHOP.CO–style landing and product detail page for the frontend test. Uses [Fake Store API](https://fakestoreapi.com/) for data and the provided Figma for layout.
 
-**Stack:** Next.js 14 (App Router), React, TypeScript, Tailwind.
+Live: https://robshandell-spacelogic-frontend-eng.vercel.app/
 
-## What’s in it
+Tech: Next.js 14 (App Router), React, TypeScript, Tailwind.
 
-- **Home:** Hero, New Arrivals + Top Selling carousels (from API), Browse by dress style, testimonials, newsletter strip, footer.
-- **Product page:** Single product (image, title, description, price, rating), breadcrumb, size/color/quantity, tabs (Details, Rating & Reviews, FAQs), “You might also like” grid.
+---
 
-Responsive layout: one column on small screens, 2–3 columns on desktop. Header uses a hamburger on mobile and full nav + search on larger screens.
+## Setup
 
-## Run it
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/robshandell/spacelogic-frontend-engineer-test.git
+   cd spacelogic-frontend-engineer-test
+   ```
 
-```bash
-git clone https://github.com/robshandell/spacelogic-frontend-engineer-test.git
-cd spacelogic-frontend-engineer-test
-npm install
-npm run dev
-```
+2. Install and run:
+   ```bash
+   npm install
+   npm run dev
+   ```
+   Then open http://localhost:3000 in your browser.
 
-Then open **http://localhost:3000**.
+3. Production build (optional):
+   ```bash
+   npm run build
+   npm run start
+   ```
 
-Production build:
+---
 
-```bash
-npm run build
-npm run start
-```
+Home page has hero, New Arrivals / Top Selling carousels, browse-by-style section, testimonials, newsletter, and footer. Product page has single product with image, details, size/colour/quantity, tabs (Details, Reviews, FAQs), and “You might also like”. Responsive: one column on mobile, 2–3 on desktop.
 
-## Repo layout
-
-- `src/app/` – Routes (home, `products/[id]`)
-- `src/components/` – Header, Footer, Hero, ProductCard, carousels, etc.
-- `src/lib/api.ts` – Fetch helpers for Fake Store API
-- `src/types/product.ts` – Product types
-
-Design reference: [Figma – Frontend test ToolKit](https://www.figma.com/design/JtBnVn0Rsi2DELoUkkbyHj/Frontend-test-ToolKit?node-id=0-1&t=DwjIyD93hWrKKlqF-1)
+Figma: [Frontend test ToolKit](https://www.figma.com/design/JtBnVn0Rsi2DELoUkkbyHj/Frontend-test-ToolKit?node-id=0-1&t=DwjIyD93hWrKKlqF-1)
