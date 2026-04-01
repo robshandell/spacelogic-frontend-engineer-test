@@ -14,7 +14,7 @@ const starburstIcon = "/assets/logo/starbusts-icon.svg";
 export function Hero() {
   return (
     <section
-      className="bg-[#f5f5f5] py-8 md:py-16 animate-fade-in-up"
+      className="py-8 md:py-16 animate-fade-in-up"
       aria-labelledby="hero-heading"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
