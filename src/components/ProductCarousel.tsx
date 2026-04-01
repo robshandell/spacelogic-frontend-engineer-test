@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useLayoutEffect } from "react";
 import { ProductCard } from "./ProductCard";
 import type { Product } from "@/types/product";
 
@@ -10,6 +10,8 @@ interface ProductCarouselProps {
   headingId?: string;
   showDiscount?: boolean;
   viewAllHref?: string;
+  /** First N cards load images with priority (keep small; use on one section near the top). */
+  imagePriorityCount?: number;
 }
 
 export function ProductCarousel({
@@ -18,7 +20,10 @@ export function ProductCarousel({
   headingId,
   showDiscount,
   viewAllHref,
+  imagePriorityCount = 0,
 }: ProductCarouselProps) {
+  const carouselRootRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(products.length > 4);
@@ -39,6 +44,55 @@ export function ProductCarousel({
     return () => ro.disconnect();
   }, [products.length]);
 
+  /** Reveal items already in (or just below) the viewport without waiting for scroll — keeps the animation while avoiding a long blank wait. */
+  useLayoutEffect(() => {
+    const root = carouselRootRef.current;
+    if (!root || !headingRef.current) return;
+
+    const nodes: HTMLElement[] = [headingRef.current];
+    root.querySelectorAll<HTMLElement>("[data-carousel-card]").forEach((el) => nodes.push(el));
+
+    const margin = 140;
+    const revealIfInView = () => {
+      for (const node of nodes) {
+        if (node.classList.contains("is-visible")) continue;
+        const rect = node.getBoundingClientRect();
+        if (rect.top < window.innerHeight + margin && rect.bottom > -margin) {
+          node.classList.add("is-visible");
+        }
+      }
+    };
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(revealIfInView);
+    });
+  }, [products, title]);
+
+  useEffect(() => {
+    const root = carouselRootRef.current;
+    if (!root || !headingRef.current) return;
+
+    const nodes: HTMLElement[] = [headingRef.current];
+    root.querySelectorAll<HTMLElement>("[data-carousel-card]").forEach((el) => nodes.push(el));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px 18% 0px" }
+    );
+
+    for (const node of nodes) {
+      if (!node.classList.contains("is-visible")) observer.observe(node);
+    }
+    return () => observer.disconnect();
+  }, [products, title]);
+
   const scroll = (direction: "left" | "right") => {
     const el = scrollRef.current;
     if (!el) return;
@@ -51,15 +105,16 @@ export function ProductCarousel({
 
   return (
     <section
-      className="pt-2 md:pt-4 pb-20 md:pb-32 animate-fade-in-up"
+      className="pt-2 md:pt-4 pb-28 md:pb-40"
       aria-labelledby={headingId}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div ref={carouselRootRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" data-carousel-title={title}>
         <div className="flex items-center justify-between gap-4 mb-8">
           <div className="flex-1 min-w-0" aria-hidden />
           <h2
+            ref={headingRef}
             id={headingId}
-            className="text-4xl md:text-5xl font-extrabold text-black uppercase tracking-tight text-center flex-shrink-0 px-4"
+            className="text-4xl md:text-5xl font-extrabold text-black uppercase tracking-tight text-center flex-shrink-0 px-4 rise-on-scroll rise-on-scroll--carousel"
           >
             {title}
           </h2>
@@ -95,13 +150,18 @@ export function ProductCarousel({
           onScroll={updateScrollState}
           className="flex gap-6 overflow-x-auto overflow-y-hidden pb-2 scroll-smooth scrollbar-hide -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
         >
-          {products.map((product) => (
+          {products.map((product, index) => (
             <div
               key={product.id}
               data-carousel-card
-              className="flex-shrink-0 w-[calc(100%-1rem)] xs:w-[calc(50%-0.75rem)] sm:w-[calc(50%-0.75rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-1.125rem)] min-w-0"
+              className="flex-shrink-0 w-[calc(100%-1rem)] xs:w-[calc(50%-0.75rem)] sm:w-[calc(50%-0.75rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-1.125rem)] min-w-0 rise-on-scroll rise-on-scroll--carousel"
+              style={{ transitionDelay: `${90 + (index % 4) * 65}ms` }}
             >
-              <ProductCard product={product} showDiscount={showDiscount} />
+              <ProductCard
+                product={product}
+                showDiscount={showDiscount}
+                priority={index < imagePriorityCount}
+              />
             </div>
           ))}
         </div>
@@ -109,7 +169,7 @@ export function ProductCarousel({
           <div className="mt-8 flex justify-center">
             <a
               href={viewAllHref}
-              className="text-sm font-medium text-black bg-white border border-gray-300 py-2.5 rounded-full shadow-sm hover:bg-gray-50 hover:border-gray-400 hover:shadow-md transition-all duration-200 min-w-[180px] text-center focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+              className="text-sm md:text-base font-semibold tracking-wide text-black bg-white border border-gray-400 py-3 md:py-3.5 rounded-full shadow-sm hover:bg-gray-50 hover:border-gray-500 hover:shadow-md transition-all duration-200 min-w-[190px] md:min-w-[220px] text-center focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
             >
               View All
             </a>

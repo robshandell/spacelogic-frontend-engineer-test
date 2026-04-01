@@ -5,7 +5,7 @@ import { fetchProductList } from "@/lib/api";
 export async function ProductListSection() {
   let products;
   try {
-    products = await fetchProductList();
+    products = await fetchProductList(20);
   } catch (e) {
     return (
       <ErrorMessage
@@ -19,16 +19,25 @@ export async function ProductListSection() {
 
   return (
     <>
-      <section id="new-arrivals" aria-labelledby="new-arrivals-heading">
+      <section
+        id="new-arrivals"
+        aria-labelledby="new-arrivals-heading"
+        className="mt-1 md:mt-3"
+      >
         <ProductCarousel
           products={newArrivals}
           title="New Arrivals"
           headingId="new-arrivals-heading"
           showDiscount
           viewAllHref="/#new-arrivals"
+          imagePriorityCount={4}
         />
       </section>
-      <section id="on-sale" aria-labelledby="top-selling-heading">
+      <section
+        id="on-sale"
+        aria-labelledby="top-selling-heading"
+        className="-mt-16 md:-mt-24"
+      >
         <ProductCarousel
           products={topSelling.length > 0 ? topSelling : products.slice(0, 8)}
           title="Top Selling"

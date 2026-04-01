@@ -5,6 +5,8 @@ import type { Product } from "@/types/product";
 interface ProductCardProps {
   product: Product;
   showDiscount?: boolean;
+  /** Prefer for above-the-fold carousel tiles to decode images sooner. */
+  priority?: boolean;
 }
 
 function StarRating({ rate }: { rate: number }) {
@@ -24,7 +26,7 @@ function StarRating({ rate }: { rate: number }) {
   );
 }
 
-export function ProductCard({ product, showDiscount }: ProductCardProps) {
+export function ProductCard({ product, showDiscount, priority }: ProductCardProps) {
   const hasDiscount = showDiscount && product.price > 50;
   const discountPrice = hasDiscount ? product.price * 0.8 : null;
 
@@ -39,6 +41,7 @@ export function ProductCard({ product, showDiscount }: ProductCardProps) {
           src={product.image}
           alt={`${product.title} – $${product.price.toFixed(2)}`}
           fill
+          priority={priority}
           className="object-contain p-4 group-hover:scale-105 transition-transform duration-300 ease-out"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />

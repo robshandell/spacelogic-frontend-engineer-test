@@ -6,7 +6,7 @@ export function Newsletter() {
   const [email, setEmail] = useState("");
   return (
     <section
-      className="py-12 md:py-16 bg-[#f5f5f5] animate-fade-in-up animate-fade-in-up-delay-3"
+      className="-mt-4 md:-mt-8 py-12 md:py-16 bg-[#f5f5f5] animate-fade-in-up"
       aria-labelledby="newsletter-heading"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -14,9 +14,9 @@ export function Newsletter() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8 lg:gap-12">
             <h2
               id="newsletter-heading"
-              className="text-2xl md:text-3xl lg:text-4xl font-bold text-white uppercase tracking-tight max-w-xl leading-tight"
+              className="text-3xl md:text-4xl lg:text-5xl font-bold text-white uppercase tracking-tight max-w-xl leading-tight"
             >
-              Stay upto date about
+              Stay up to date about
               <br />
               our latest offers
             </h2>

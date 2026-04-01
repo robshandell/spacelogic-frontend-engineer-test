@@ -45,11 +45,163 @@ body {
   }
 }
 
+@keyframes text-rise-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .animate-fade-in-up {
-  animation: fade-in-up 0.5s ease-out forwards;
+  animation: fade-in-up 0.55s ease-out both;
+}
+
+.animate-text-rise-up {
+  animation: text-rise-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-fade-in-up-delay-1 { animation-delay: 0.1s; }
 .animate-fade-in-up-delay-2 { animation-delay: 0.2s; }
 .animate-fade-in-up-delay-3 { animation-delay: 0.3s; }
 .animate-fade-in-up-delay-4 { animation-delay: 0.4s; }
+.animate-fade-in-up-delay-5 { animation-delay: 0.5s; }
+.animate-fade-in-up-delay-6 { animation-delay: 0.6s; }
+.animate-fade-in-up-delay-7 { animation-delay: 0.7s; }
+
+@keyframes hero-cinematic-in {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes stat-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.92);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.035);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-hero-cinematic {
+  animation: hero-cinematic-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-stat-pop {
+  animation: stat-pop-in 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes scroll-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer utilities {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: scroll-reveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 35%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .animate-fade-in-up,
+  .animate-text-rise-up,
+  .animate-fade-in-up-delay-1,
+  .animate-fade-in-up-delay-2,
+  .animate-fade-in-up-delay-3,
+  .animate-fade-in-up-delay-4,
+  .animate-fade-in-up-delay-5,
+  .animate-fade-in-up-delay-6,
+  .animate-fade-in-up-delay-7,
+  .animate-hero-cinematic,
+  .animate-stat-pop,
+  .animate-starburst-circular,
+  .animate-starburst-circular-reverse {
+    animation: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .rise-on-scroll,
+  .rise-on-scroll--carousel {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+.rise-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Product carousels: slightly quicker motion so the section feels responsive after data loads. */
+.rise-on-scroll--carousel {
+  transition-duration: 0.55s;
+}
+
+.rise-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero starburst — constant circular spin */
+@keyframes starburst-circular {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-starburst-circular {
+  animation: starburst-circular 12s linear infinite;
+  transform-origin: center center;
+}
+
+.animate-starburst-circular-reverse {
+  animation: starburst-circular 15s linear infinite reverse;
+  transform-origin: center center;
+}

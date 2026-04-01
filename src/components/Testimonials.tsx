@@ -27,6 +27,7 @@ const reviews = [
 
 export function Testimonials() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
@@ -46,6 +47,28 @@ export function Testimonials() {
     return () => ro.disconnect();
   }, []);
 
+  useEffect(() => {
+    const root = sectionRef.current;
+    if (!root) return;
+    const nodes = Array.from(root.querySelectorAll<HTMLElement>("[data-testimonial-reveal]"));
+    if (nodes.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
+    );
+
+    nodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, []);
+
   const scroll = (direction: "left" | "right") => {
     const el = scrollRef.current;
     if (!el) return;
@@ -58,14 +81,16 @@ export function Testimonials() {
 
   return (
     <section
-      className="py-10 md:py-16 bg-[#F0F0F0] animate-fade-in-up animate-fade-in-up-delay-2"
+      ref={sectionRef}
+      className="-mt-6 md:-mt-10 py-10 md:py-16 bg-[#F0F0F0]"
       aria-labelledby="testimonials-heading"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
           <h2
             id="testimonials-heading"
-            className="text-2xl md:text-3xl font-bold text-black uppercase tracking-tight"
+            data-testimonial-reveal
+            className="rise-on-scroll text-3xl md:text-4xl font-extrabold text-black uppercase tracking-tight leading-tight"
           >
             Our happy customers
           </h2>
@@ -103,7 +128,8 @@ export function Testimonials() {
             <article
               key={review.name}
               data-review-card
-              className="flex-shrink-0 w-[85vw] sm:w-[400px] lg:w-[380px] bg-white rounded-2xl p-6 md:p-8 shadow-md flex flex-col min-h-0 hover:shadow-lg hover:border border-transparent border-gray-200 transition-all duration-300 ease-out"
+              data-testimonial-reveal
+              className="rise-on-scroll flex-shrink-0 w-[85vw] sm:w-[400px] lg:w-[380px] bg-white rounded-2xl p-6 md:p-8 shadow-md flex flex-col min-h-0 hover:shadow-lg hover:border border-transparent border-gray-200 transition-all duration-300 ease-out"
             >
               <div className="flex gap-1 text-amber-400 mb-3" aria-hidden>
                 ★★★★★

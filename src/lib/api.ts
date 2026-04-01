@@ -1,7 +1,12 @@
+import { cache } from "react";
 import type { Product } from "@/types/product";
 
 const BASE_URL = "https://fakestoreapi.com";
 const FALLBACK_PRODUCTS_COUNT = 20;
+const REQUEST_TIMEOUT_MS = 4000;
+/** Home carousels only need a bounded list; fail over to local data sooner if the API stalls. */
+const HOME_PRODUCT_LIST_TIMEOUT_MS = 2800;
+const RETRY_DELAY_MS = 300;
 
 const DEFAULT_HEADERS = {
   Accept: "application/json",
@@ -79,36 +84,49 @@ function getFallbackProducts(): Product[] {
   });
 }
 
-async function fetchWithRetry<T>(url: string): Promise<T> {
+async function fetchWithRetry<T>(
+  url: string,
+  options: { attempts?: number; timeoutMs?: number } = {}
+): Promise<T> {
+  const attempts = options.attempts ?? 2;
+  const timeoutMs = options.timeoutMs ?? REQUEST_TIMEOUT_MS;
   let lastError: Error | null = null;
-  for (let attempt = 0; attempt < 2; attempt++) {
+  for (let attempt = 0; attempt < attempts; attempt++) {
     try {
       const res = await fetch(url, {
         next: { revalidate: 60 },
         headers: DEFAULT_HEADERS,
-        signal: AbortSignal.timeout(15000),
+        signal: AbortSignal.timeout(timeoutMs),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.json();
     } catch (e) {
       lastError = e instanceof Error ? e : new Error(String(e));
-      if (attempt === 0) await new Promise((r) => setTimeout(r, 1000));
+      if (attempt < attempts - 1) await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
     }
   }
   throw lastError ?? new Error("Failed to fetch");
 }
 
-export async function fetchProductList(): Promise<Product[]> {
+/** @param limit When set (e.g. 20 for home carousels), requests fewer rows for a smaller, faster response. */
+export const fetchProductList = cache(async (limit?: number): Promise<Product[]> => {
+  const qs = limit != null ? `?limit=${limit}` : "";
+  const timeoutMs = limit != null ? HOME_PRODUCT_LIST_TIMEOUT_MS : REQUEST_TIMEOUT_MS;
   try {
-    return await fetchWithRetry<Product[]>(`${BASE_URL}/products`);
+    // Fail fast for homepage carousels so fallback appears quickly if API is down.
+    return await fetchWithRetry<Product[]>(`${BASE_URL}/products${qs}`, {
+      attempts: 1,
+      timeoutMs,
+    });
   } catch {
     return getFallbackProducts();
   }
-}
+});
 
 export async function fetchProduct(id: string): Promise<Product> {
   try {
-    return await fetchWithRetry<Product>(`${BASE_URL}/products/${id}`);
+    // Product detail should open quickly; fall back fast when upstream API is unstable.
+    return await fetchWithRetry<Product>(`${BASE_URL}/products/${id}`, { attempts: 1, timeoutMs: 3000 });
   } catch {
     const fallbackProduct = getFallbackProducts().find((item) => item.id === Number(id));
     if (fallbackProduct) return fallbackProduct;

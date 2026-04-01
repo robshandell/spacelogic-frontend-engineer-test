@@ -2,8 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { fetchProduct, fetchProductList } from "@/lib/api";
-
-export const dynamic = "force-dynamic";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { Header } from "@/components/Header";
 import { Newsletter } from "@/components/Newsletter";
@@ -42,13 +40,12 @@ export default async function ProductPage({
   const id = params?.id;
   if (!id) notFound();
   let product;
+  let allProducts;
   try {
-    product = await fetchProduct(id);
+    [product, allProducts] = await Promise.all([fetchProduct(id), fetchProductList()]);
   } catch {
     notFound();
   }
-
-  const allProducts = await fetchProductList();
   const related = allProducts.filter((p) => p.id !== product.id).slice(0, 4);
   const hasDiscount = product.price > 50;
   const discountPrice = hasDiscount ? product.price * 0.8 : null;
