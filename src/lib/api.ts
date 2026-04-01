@@ -9,11 +9,11 @@ const DEFAULT_HEADERS = {
 };
 
 const FALLBACK_IMAGE_POOL = [
-  "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&crop=center&w=1200&h=1200&q=80",
+  "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&crop=center&w=1200&h=1200&q=80",
+  "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&crop=center&w=1200&h=1200&q=80",
+  "https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?auto=format&fit=crop&crop=center&w=1200&h=1200&q=80",
+  "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&crop=center&w=1200&h=1200&q=80",
 ];
 
 const FALLBACK_TEMPLATES: Pick<Product, "title" | "description" | "category">[] = [
